@@ -122,7 +122,7 @@ HAL (depricated) > udev > udevadm
   udevadm info -a -p /sys/class/net/enp0s3
 Включим мониторинг свойств ядра:
   udevadm monitor --property --kernel
-В терминале появится сообщение:
+В modinfo сообщение:
   monitor will print the received events for:
   KERNEL - the kernel uevent
 Во время мониторинга если мы отключим како-либо устройство,
@@ -130,7 +130,7 @@ HAL (depricated) > udev > udevadm
 ---------------------------
 Управление модулями ядра
   Просмотрим инф. о модуле сетевой карты e1000:
-    modeinfo e1000
+    modinfo e1000
   Удалим ее (SSH отвалится):
     rmmod e1000
   Проверим через ifconfig, убедимся что сетевой адрес стал 127.0.0.1
@@ -143,8 +143,41 @@ HAL (depricated) > udev > udevadm
   inet 10.0.2.15  netmask 255.255.255.0
   
 1) Просмотреть информацию о процессоре и модулях оперативной памяти.
-
+Размеры кэша процессора, ядро1
+  root@ubnt20:/sys/bus/cpu/devices/cpu1/cache# cat index0/size
+  32K
+  root@ubnt20:/sys/bus/cpu/devices/cpu1/cache# cat index1/size
+  32K
+  root@ubnt20:/sys/bus/cpu/devices/cpu1/cache# cat index2/size
+  256K
+  root@ubnt20:/sys/bus/cpu/devices/cpu1/cache# cat index3/size
+  3072K
+root@ubnt20:/sys# cd /proc
+ #
+ cat cpuinfo - вывод инф. о процессоре
+ model name      : Intel(R) Core(TM) i5-7300U CPU @ 2.60GHz
+ #
+ root@ubnt20:/proc# cat meminfo
+  MemTotal:        4026724 kB
+  
 2) Определить модель жесткого диска.
+  root@ubnt20:/# lshw
+смотрим вывод:
+   *-disk
+             description: ATA Disk
+             product: VBOX HARDDISK
+             vendor: VirtualBox
+
 3) Вывести сведения обо всех платах расширения на шине PCIEx.
+  root@ubnt20:/sys# ls bus/acpi/devices
+  ACPI0003:00  LNXCPU:00    LNXVIDEO:00  PNP0400:01  PNP0B00:00  PNP0F03:00
+  APP0001:00   LNXCPU:01    PNP0000:00   PNP0501:00  PNP0C02:00  PNP8390:00
+  device:00    LNXPWRBN:00  PNP0100:00   PNP0501:01  PNP0C0A:00
+  device:01    LNXSLPBN:00  PNP0103:00   PNP0501:02  PNP0C0F:00
+  device:02    LNXSYBUS:00  PNP0200:00   PNP0501:03  PNP0C0F:01
+  device:03    LNXSYBUS:01  PNP0303:00   PNP0700:00  PNP0C0F:02
+  device:04    LNXSYSTM:00  PNP0400:00   PNP0A03:00  PNP0C0F:03
+
 4) Отключить звуковую карту.
+
 5) Выключить контроллер usb.
